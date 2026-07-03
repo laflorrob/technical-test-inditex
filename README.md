@@ -1,10 +1,10 @@
 # TechnicalTestInditex
 
-Small Spring Boot service that returns the applicable product applicableApplicablePrice for a given application date, product, and brand.
+Small Spring Boot service that returns the applicable product price for a given application date, product, and brand.
 
 ## What the app does
 
-The API exposes `GET /applicablePrices` and returns the applicableApplicablePrice record that matches:
+The API exposes `GET /prices` and returns the applicable price record that matches:
 
 - `applicationDate` (format: `yyyy-MM-dd-HH.mm.ss`)
 - `productId`
@@ -16,13 +16,13 @@ If multiple records match, the one with the highest priority is returned.
 
 The project follows a hexagonal architecture (ports and adapters):
 
-- `com.inditex.applicableApplicablePrice.adapter.in.api`: HTTP entrypoint (`PriceController`)
-- `com.inditex.applicableApplicablePrice.adapter.in.exception`: exception handlers and error response model
-- `com.inditex.applicableApplicablePrice.adapter.in / adapter.out`: MapStruct mapper between adapters and domain
-- `com.inditex.applicableApplicablePrice.adapter.out.persistence`: JPA repository + persistence adapter
-- `com.inditex.applicableApplicablePrice.application`: use cases/business orchestration (`FindApplicablePrice`)
-- `com.inditex.applicableApplicablePrice.application.port.in` / `port.out`: input/output ports
-- `com.inditex.applicableApplicablePrice.domain`: domain model (`Price`)
+- `com.inditex.price.adapter.in.api`: HTTP entrypoint (`PriceController`)
+- `com.inditex.price.adapter.in.exception`: exception handlers and error response model
+- `com.inditex.price.adapter.in / adapter.out`: MapStruct mapper between adapters and domain
+- `com.inditex.price.adapter.out.persistence`: JPA repository + persistence adapter
+- `com.inditex.price.application`: use cases/business orchestration (`FindApplicablePrice`)
+- `com.inditex.price.application.port.in` / `port.out`: input/output ports
+- `com.inditex.price.domain`: domain model (`Price`)
 
 Tech stack:
 
@@ -41,14 +41,14 @@ Prerequisites:
 From project root:
 
 ```powershell
-Set-Location "C:\Users\esflol00\IdeaProjects\TechnicalTestInditex"
+Set-Location "C:\path\to\technical-test-inditex"
 mvn spring-boot:run
 ```
 
 If you prefer jar execution:
 
 ```powershell
-Set-Location "C:\Users\esflol00\IdeaProjects\TechnicalTestInditex"
+Set-Location "C:\path\to\technical-test-inditex"
 mvn clean package
 java -jar target\TechnicalTestInditex-1.0-SNAPSHOT.jar
 ```
@@ -57,11 +57,11 @@ java -jar target\TechnicalTestInditex-1.0-SNAPSHOT.jar
 
 A ready-to-use Postman collection is included:
 
-- `applicablePrices.postman_collection.json`
+- `prices.postman_collection.json`
 
 Steps:
 
-1. Import `applicablePrices.postman_collection.json` into Postman.
+1. Import `prices.postman_collection.json` into Postman.
 2. Ensure variable `baseUrl` is `http://localhost:8080`.
 3. Run request **Get Applicable Price**.
 
@@ -76,7 +76,7 @@ Default values in collection:
 The OpenAPI contract is available in Swagger UI:
 
 - Swagger UI: `http://localhost:8080/swagger-ui.html`
-- Raw OpenAPI file: `http://localhost:8080/applicablePrices.yml`
+- Raw OpenAPI file: `http://localhost:8080/prices.yml`
 
 ## Database access (H2)
 
@@ -90,5 +90,5 @@ H2 console is enabled for inspection:
 ## Example request
 
 ```text
-GET http://localhost:8080/applicablePrices?applicationDate=2020-06-14-10.00.00&productId=35455&brandId=1
+GET http://localhost:8080/prices?applicationDate=2020-06-14-10.00.00&productId=35455&brandId=1
 ```

@@ -1,0 +1,142 @@
+openapi: 3.0.3
+info:
+  title: Technical Test Inditex - Prices API
+  version: 1.0.0
+  description: API to retrieve the applicable price for a product and brand at a given date-time.
+servers:
+  - url: http://localhost:8080
+paths:
+  /prices:
+    get:
+      tags:
+        - Prices
+      summary: Get applicable price by filter
+      description: Returns the price with highest priority that matches application date, product, and brand.
+      operationId: getApplicablePrice
+      parameters:
+        - name: applicationDate
+          in: query
+          required: true
+          description: Date-time in format yyyy-MM-dd-HH.mm.ss
+          schema:
+            type: string
+            pattern: '^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])-(?:[01]\d|2[0-3])\.[0-5]\d\.[0-5]\d$'
+            example: 2020-06-14-10.00.00
+        - name: productId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 35455
+        - name: brandId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: Applicable price found
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/GetPriceResponse'
+              examples:
+                test1:
+                  summary: 14th June 10:00
+                  value:
+                    productId: 35455
+                    brandId: 1
+                    priceList: 1
+                    startDate: 2020-06-14-00.00.00
+                    endDate: 2020-12-31-23.59.59
+                    price: 35.50
+                    currency: EUR
+        '400':
+          description: Validation error in request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidDate:
+                  value:
+                    timestamp: '2026-06-12T12:00:00'
+                    message: applicationDate must match format yyyy-MM-dd-HH.mm.ss
+                    path: /prices
+        '404':
+          description: No applicable price found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                notFound:
+                  value:
+                    timestamp: '2026-06-12T12:00:00'
+                    message: No applicable price found for the given filter
+                    path: /prices
+components:
+  schemas:
+    GetPriceResponse:
+      type: object
+      required:
+        - productId
+        - brandId
+        - priceList
+        - startDate
+        - endDate
+        - price
+        - currency
+      properties:
+        productId:
+          type: integer
+          format: int64
+          example: 35455
+        brandId:
+          type: integer
+          format: int64
+          example: 1
+        priceList:
+          type: integer
+          format: int64
+          example: 2
+        startDate:
+          type: string
+          description: Date-time in format yyyy-MM-dd-HH.mm.ss
+          example: 2020-06-14-15.00.00
+        endDate:
+          type: string
+          description: Date-time in format yyyy-MM-dd-HH.mm.ss
+          example: 2020-06-14-18.30.00
+        price:
+          type: number
+          format: double
+          example: 25.45
+        currency:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: EUR
+    ErrorResponse:
+      type: object
+      required:
+        - timestamp
+        - message
+        - path
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-06-12T12:00:00'
+        message:
+          type: string
+          example: applicationDate is required
+        path:
+          type: string
+          example: /prices
+

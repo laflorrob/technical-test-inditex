@@ -1,0 +1,66 @@
+{
+  "info": {
+    "_postman_id": "8f33766a-b723-489e-b16a-cbde188f5425",
+    "name": "TechnicalTestInditex - Prices API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Ready-to-use request for the Prices endpoint."
+  },
+  "item": [
+    {
+      "name": "Get Applicable Price",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/hal+json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/prices?applicationDate={{applicationDate}}&productId={{productId}}&brandId={{brandId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "prices"
+          ],
+          "query": [
+            {
+              "key": "applicationDate",
+              "value": "{{applicationDate}}"
+            },
+            {
+              "key": "productId",
+              "value": "{{productId}}"
+            },
+            {
+              "key": "brandId",
+              "value": "{{brandId}}"
+            }
+          ]
+        },
+        "description": "Returns the applicable price for the provided filter.\nDate format: yyyy-MM-dd-HH.mm.ss"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "applicationDate",
+      "value": "2020-06-14-10.00.00"
+    },
+    {
+      "key": "productId",
+      "value": "35455"
+    },
+    {
+      "key": "brandId",
+      "value": "1"
+    }
+  ]
+}
+
